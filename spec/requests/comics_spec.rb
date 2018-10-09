@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'Comics API', type: :request do
   # initialize test data
-  let!(:comics) { create_list(:comic, 10) }
+  let(:user) { create(:user) }
+  let!(:comics) { create_list(:comic, 10, user_id: user.id, is_comments_active: true) }
   let(:comic_id) { comics.first.id }
 
   # Test suite for GET /comics
@@ -44,7 +45,7 @@ RSpec.describe 'Comics API', type: :request do
       end
 
       it 'returns a not found message' do
-        expect(response.body).to match(/Couldn't find comic/)
+        expect(response.body).to match("Couldn't find Comic with 'id'=100")
       end
     end
   end
@@ -52,7 +53,7 @@ RSpec.describe 'Comics API', type: :request do
   # Test suite for POST /comics
   describe 'POST /comics' do
     # valid payload
-    let(:valid_attributes) { { name: 'Spiderman', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non euismod quam, vitae cursus ligula. Donec dignissim dui elit, id venenatis nibh consectetur in. Suspendisse potenti. Quisque vel est viverra, posuere ante vitae, posuere eros. Curabitur fermentum nibh dolor, eu facilisis urna condimentum a. Praesent id leo varius, elementum leo a, blandit eros. Pellentesque in nunc ac arcu vestibulum ultricies a non urna. Sed feugiat nulla a nulla pharetra posuere. Etiam sed pharetra felis. Pellentesque aliquet tincidunt viverra. Quisque rutrum molestie turpis a sagittis. Vestibulum sed quam et augue volutpat lacinia in vitae erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar risus at arcu ornare porttitor.', is_public: true, is_comments_active: true } }
+    let(:valid_attributes) { { name: 'Spiderman', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non euismod quam, vitae cursus ligula. Donec dignissim dui elit, id venenatis nibh consectetur in. Suspendisse potenti. Quisque vel est viverra, posuere ante vitae, posuere eros. Curabitur fermentum nibh dolor, eu facilisis urna condimentum a. Praesent id leo varius, elementum leo a, blandit eros. Pellentesque in nunc ac arcu vestibulum ultricies a non urna. Sed feugiat nulla a nulla pharetra posuere. Etiam sed pharetra felis. Pellentesque aliquet tincidunt viverra. Quisque rutrum molestie turpis a sagittis. Vestibulum sed quam et augue volutpat lacinia in vitae erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar risus at arcu ornare porttitor.', is_public: true, is_comments_active: true, user_id: user.id } }
 
     context 'when the request is valid' do
       before { post '/comics', params: valid_attributes }
@@ -75,7 +76,7 @@ RSpec.describe 'Comics API', type: :request do
 
       it 'returns a validation failure message' do
         expect(response.body)
-          .to match(/Validation failed: Created by can't be blank/)
+          .to match("Validation failed: User must exist, Description can't be blank, Is public can't be blank, Is comments active can't be blank")
       end
     end
   end
