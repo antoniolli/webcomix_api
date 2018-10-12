@@ -7,10 +7,11 @@ RSpec.describe 'Pages API' do
   let!(:pages) { create_list(:page, 20, comic_id: comic.id) }
   let(:comic_id) { comic.id }
   let(:id) { pages.first.id }
+  let(:headers) { valid_headers }
 
   # Test suite for GET /comics/:comic_id/pages
   describe 'GET /comics/:comic_id/pages' do
-    before { get "/comics/#{comic_id}/pages" }
+    before { get "/comics/#{comic_id}/pages", params: {}, headers: headers }
 
     context 'when comic exists' do
       it 'returns status code 200' do
@@ -37,7 +38,7 @@ RSpec.describe 'Pages API' do
 
   # Test suite for GET /comics/:comic_id/pages/:id
   describe 'GET /comics/:comic_id/pages/:id' do
-    before { get "/comics/#{comic_id}/pages/#{id}" }
+    before { get "/comics/#{comic_id}/pages/#{id}", params: {}, headers: headers }
 
     context 'when comic page exists' do
       it 'returns status code 200' do
@@ -64,10 +65,17 @@ RSpec.describe 'Pages API' do
 
   # Test suite for PUT /comics/:comic_id/pages
   describe 'POST /comics/:comic_id/pages' do
-    let(:valid_attributes) { { title: 'Visit Narnia', number: 1, is_public: true, comic_id: comic.id } }
+    let(:valid_attributes) {
+      { title: 'Visit Narnia',
+        number: 1,
+        is_public: true,
+        comic_id: comic.id }.to_json
+      }
 
     context 'when request attributes are valid' do
-      before { post "/comics/#{comic_id}/pages", params: valid_attributes }
+      before do
+        post "/comics/#{comic_id}/pages", params: valid_attributes, headers: headers
+      end
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
@@ -75,7 +83,7 @@ RSpec.describe 'Pages API' do
     end
 
     context 'when an invalid request' do
-      before { post "/comics/#{comic_id}/pages", params: {} }
+      before { post "/comics/#{comic_id}/pages", params: {}, headers: headers }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -89,9 +97,11 @@ RSpec.describe 'Pages API' do
 
   # Test suite for PUT /comics/:comic_id/pages/:id
   describe 'PUT /comics/:comic_id/pages/:id' do
-    let(:valid_attributes) { { title: 'Mozart' } }
+    let(:valid_attributes) { { title: 'Mozart' }.to_json }
 
-    before { put "/comics/#{comic_id}/pages/#{id}", params: valid_attributes }
+    before do
+      put "/comics/#{comic_id}/pages/#{id}", params: valid_attributes, headers: headers
+    end
 
     context 'when page exists' do
       it 'returns status code 204' do
@@ -119,7 +129,7 @@ RSpec.describe 'Pages API' do
 
   # Test suite for DELETE /comics/:id
   describe 'DELETE /comics/:id' do
-    before { delete "/comics/#{comic_id}/pages/#{id}" }
+    before { delete "/comics/#{comic_id}/pages/#{id}", params: {}, headers: headers }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

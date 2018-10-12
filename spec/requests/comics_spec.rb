@@ -85,7 +85,7 @@ RSpec.describe 'Comics API', type: :request do
 
       it 'returns a validation failure message' do
         expect(json['message'])
-          .to match("Validation failed: User must exist, Description can't be blank, Is public can't be blank, Is comments active can't be blank")
+          .to match(/Validation failed: Description can't be blank, Is public can't be blank, Is comments active can't be blank/)
       end
     end
   end

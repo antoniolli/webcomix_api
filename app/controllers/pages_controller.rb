@@ -1,6 +1,7 @@
 class PagesController < ApplicationController
   before_action :set_comic
   before_action :set_comic_page, only: [:show, :update, :destroy]
+  skip_before_action :authorize_request, only: [:index, :show]
 
   # GET /comics/:comic_id/pages
   def index

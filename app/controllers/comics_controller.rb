@@ -1,5 +1,6 @@
 class ComicsController < ApplicationController
   before_action :set_comic, only: [:show, :update, :destroy]
+  skip_before_action :authorize_request, only: :index
 
   # GET /comics
   def index
@@ -7,9 +8,16 @@ class ComicsController < ApplicationController
     json_response(@comics)
   end
 
+  # GET /comics/user/:id
+  def by_user
+    # get current user comics
+    @comics = current_user.comics
+    json_response(@comics)
+  end
+
   # POST /comics
   def create
-    @comic = Comic.create!(comic_params)
+    @comic = current_user.comics.create!(comic_params)
     json_response(@comic, :created)
   end
 

@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-RSpec.describe PagesController, type: :controller do
+RSpec.describe V1::PagesController, type: :controller do
 
 end

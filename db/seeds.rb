@@ -5,3 +5,9 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+10.times do
+  comic = Comic.create(name: Faker::StarTrek.character, description: Faker::Lorem.paragraph, is_public: true, is_comments_active: true,user_id: User.first.id)
+  10.times do |i|
+    comic.pages.create(title: Faker::StarTrek.specie, number: i, is_public: true)
+  end
+end
