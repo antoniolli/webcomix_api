@@ -11,7 +11,11 @@ module V1
 
     # GET /comics/:comic_id/pages/:id
     def show
-      json_response(@page)
+      payload = {
+        page: @page,
+        url: @page.image.attachment ? url_for(@page.image) : ''
+      }
+      json_response(payload)
     end
 
     # POST /comics/:comic_id/pages
