@@ -6,7 +6,7 @@ RSpec.describe 'Pages API' do
   let!(:comic) { create(:comic, user_id: user.id, is_public: true, is_comments_active: true) }
   let!(:pages) { create_list(:page, 20, comic_id: comic.id) }
   let(:comic_id) { comic.id }
-  let(:id) { pages.first.id }
+  let(:page_id) { pages.first.id }
   let(:headers) { valid_headers }
 
   # Test suite for GET /comics/:comic_id/pages
@@ -38,7 +38,7 @@ RSpec.describe 'Pages API' do
 
   # Test suite for GET /comics/:comic_id/pages/:id
   describe 'GET /comics/:comic_id/pages/:id' do
-    before { get "/comics/#{comic_id}/pages/#{id}", params: {}, headers: headers }
+    before { get "/comics/#{comic_id}/pages/#{page_id}", params: {}, headers: headers }
 
     context 'when comic page exists' do
       it 'returns status code 200' do
@@ -46,12 +46,12 @@ RSpec.describe 'Pages API' do
       end
 
       it 'returns the page' do
-        expect(json['id']).to eq(id)
+        expect(json["page"]["id"]).to eq(page_id)
       end
     end
 
     context 'when comic page does not exist' do
-      let(:id) { 0 }
+      let(:page_id) { 0 }
 
       it 'returns status code 404' do
         expect(response).to have_http_status(404)
@@ -100,7 +100,7 @@ RSpec.describe 'Pages API' do
     let(:valid_attributes) { { title: 'Mozart' }.to_json }
 
     before do
-      put "/comics/#{comic_id}/pages/#{id}", params: valid_attributes, headers: headers
+      put "/comics/#{comic_id}/pages/#{page_id}", params: valid_attributes, headers: headers
     end
 
     context 'when page exists' do
@@ -109,13 +109,13 @@ RSpec.describe 'Pages API' do
       end
 
       it 'updates the page' do
-        updated_page = Page.find(id)
+        updated_page = Page.find(page_id)
         expect(updated_page.title).to match(/Mozart/)
       end
     end
 
     context 'when the page does not exist' do
-      let(:id) { 0 }
+      let(:page_id) { 0 }
 
       it 'returns status code 404' do
         expect(response).to have_http_status(404)
@@ -129,7 +129,7 @@ RSpec.describe 'Pages API' do
 
   # Test suite for DELETE /comics/:id
   describe 'DELETE /comics/:id' do
-    before { delete "/comics/#{comic_id}/pages/#{id}", params: {}, headers: headers }
+    before { delete "/comics/#{comic_id}/pages/#{page_id}", params: {}, headers: headers }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
