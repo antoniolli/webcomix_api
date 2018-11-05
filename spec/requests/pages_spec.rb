@@ -4,7 +4,8 @@ RSpec.describe 'Pages API' do
   # Initialize the test data
   let(:user) { create(:user) }
   let!(:comic) { create(:comic, user_id: user.id, is_public: true, is_comments_active: true) }
-  let!(:pages) { create_list(:page, 20, comic_id: comic.id) }
+  let(:image) { FilesTestHelper.png }
+  let!(:pages) { create_list(:page, 20, comic_id: comic.id, image: image) }
   let(:comic_id) { comic.id }
   let(:page_id) { pages.first.id }
   let(:headers) { valid_headers }
@@ -69,7 +70,8 @@ RSpec.describe 'Pages API' do
       { title: 'Visit Narnia',
         number: 1,
         is_public: true,
-        comic_id: comic.id }.to_json
+        comic_id: comic_id,
+        image: image }
       }
 
     context 'when request attributes are valid' do

@@ -5,4 +5,5 @@ class Page < ApplicationRecord
 
   # validations
   validates_presence_of :title, :number, :is_public
+  validates :image, attached: true
 end
