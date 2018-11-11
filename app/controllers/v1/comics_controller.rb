@@ -26,6 +26,7 @@ module V1
     # POST /comics
     def create
       @comic = current_user.comics.create!(comic_params)
+      @comic.cover.attach(comic_params[:cover])
       json_response(@comic, :created)
     end
 

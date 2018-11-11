@@ -21,6 +21,7 @@ module V1
     # POST /comics/:comic_id/pages
     def create
       @comic.pages.create!(page_params)
+      @comic.pages.image.attach(comic_params[:image])
       json_response(@comic, :created)
     end
 
