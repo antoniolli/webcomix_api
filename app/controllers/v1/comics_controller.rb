@@ -5,8 +5,15 @@ module V1
 
     # GET /comics
     def index
+      payload = []
       @comics = Comic.all.paginate(page: params[:page], per_page: 20)
-      json_response(@comics)
+      @comics.each do |comic|
+        payload.push({
+          comic: comic,
+          url: comic.cover.attachment ? url_for(comic.cover) : ''
+        })
+      end
+      json_response(payload)
     end
 
     # GET /comics/user/:id
@@ -43,7 +50,7 @@ module V1
 
     def comic_params
       # whitelist params
-      params.permit(:name, :description, :is_public, :is_comments_active, :user_id)
+      params.permit(:name, :description, :is_public, :is_comments_active, :user_id, :cover)
     end
 
     def set_comic
