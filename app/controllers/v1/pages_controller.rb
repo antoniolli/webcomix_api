@@ -6,15 +6,19 @@ module V1
 
     # GET /comics/:comic_id/pages
     def index
-      json_response(@comic.pages)
+      payload = []
+      @comic.pages.each do |page|
+        temp = page.attributes
+        temp["url"] = page.image.attachment ? url_for(page.image) : ''
+        payload.push(temp)
+      end
+      json_response(payload)
     end
 
     # GET /comics/:comic_id/pages/:id
     def show
-      payload = {
-        page: @page,
-        url: @page.image.attachment ? url_for(@page.image) : ''
-      }
+      payload = @page.attributes
+      payload["url"] = @page.image.attachment ? url_for(@page.image) : ''
       json_response(payload)
     end
 

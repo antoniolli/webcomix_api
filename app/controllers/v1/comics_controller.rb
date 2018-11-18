@@ -8,11 +8,10 @@ module V1
       payload = []
       @comics = Comic.all.paginate(page: params[:page], per_page: 20)
       @comics.each do |comic|
-        payload.push({
-          comic: comic,
-          author: User.find(comic.user_id).name,
-          url: comic.cover.attachment ? url_for(comic.cover) : ''
-        })
+        temp = comic.attributes
+        temp["author"] = User.find(comic.user_id).name
+        temp["url"] = comic.cover.attachment ? url_for(comic.cover) : ''
+        payload.push(temp)
       end
       json_response(payload)
     end
@@ -33,12 +32,10 @@ module V1
 
     # GET /comics/:id
     def show
-      payload = {
-        comic: @comic,
-        author: User.find(@comic.user_id).name,
-        url: @comic.cover.attachment ? url_for(@comic.cover) : '',
-        pages: @comic.pages
-      }
+      payload = @comic.attributes
+      payload["author"] = User.find(@comic.user_id).name
+      payload["url"] = @comic.cover.attachment ? url_for(@comic.cover) : ''
+      payload["pages"] = @comic.pages
       json_response(payload)
     end
 
