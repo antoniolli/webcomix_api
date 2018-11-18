@@ -10,6 +10,7 @@ module V1
       @comics.each do |comic|
         payload.push({
           comic: comic,
+          author: User.find(comic.user_id).name,
           url: comic.cover.attachment ? url_for(comic.cover) : ''
         })
       end
@@ -32,7 +33,13 @@ module V1
 
     # GET /comics/:id
     def show
-      json_response(@comic)
+      payload = {
+        comic: @comic,
+        author: User.find(@comic.user_id).name,
+        url: @comic.cover.attachment ? url_for(@comic.cover) : '',
+        pages: @comic.pages
+      }
+      json_response(payload)
     end
 
     # PUT /comics/:id
