@@ -39,6 +39,11 @@ module V1
       json_response(payload)
     end
 
+    def follow
+      payload = { followed: true }
+      json_response(payload)
+    end
+
     # PUT /comics/:id
     def update
       @comic.update(comic_params)

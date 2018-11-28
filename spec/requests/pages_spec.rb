@@ -47,7 +47,7 @@ RSpec.describe 'Pages API' do
       end
 
       it 'returns the page' do
-        expect(json["page"]["id"]).to eq(page_id)
+        expect(json["id"]).to eq(page_id)
       end
     end
 

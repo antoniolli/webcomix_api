@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_14_142650) do
+ActiveRecord::Schema.define(version: 2018_11_21_205814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,16 @@ ActiveRecord::Schema.define(version: 2018_10_14_142650) do
     t.index ["user_id"], name: "index_comics_on_user_id"
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.string "message"
+    t.bigint "user_id"
+    t.bigint "page_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["page_id"], name: "index_comments_on_page_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
   create_table "pages", force: :cascade do |t|
     t.string "title"
     t.boolean "is_public"
@@ -57,6 +67,16 @@ ActiveRecord::Schema.define(version: 2018_10_14_142650) do
     t.index ["comic_id"], name: "index_pages_on_comic_id"
   end
 
+  create_table "subscribers", force: :cascade do |t|
+    t.boolean "is_blocked"
+    t.bigint "comic_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["comic_id"], name: "index_subscribers_on_comic_id"
+    t.index ["user_id"], name: "index_subscribers_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -65,4 +85,8 @@ ActiveRecord::Schema.define(version: 2018_10_14_142650) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "comments", "pages"
+  add_foreign_key "comments", "users"
+  add_foreign_key "subscribers", "comics"
+  add_foreign_key "subscribers", "users"
 end

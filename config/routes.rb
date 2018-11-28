@@ -6,10 +6,25 @@ Rails.application.routes.draw do
 
   scope module: :v1, constraints: ApiVersion.new('v1', true) do
     resources :comics do
-      resources :pages
+      resources :subscribers
+      resources :pages do
+        resources :comments
+      end
     end
+
+    # Favorites
+    get 'favorites', to: 'subscribers#index_favorites'
+    post 'favorites/:comic_id', to: 'subscribers#create_favorites'
+    delete 'favorites/:comic_id', to: 'subscribers#destroy_favorites'
+
+    # Login
+    post 'auth/login', to: 'authentication#authenticate'
+    post 'signup', to: 'users#create'
   end
 
-  post 'auth/login', to: 'authentication#authenticate'
-  post 'signup', to: 'users#create'
+  #comments
+  # get 'comments/:comic_id/:page_id', to: 'comments#index'
+  # post 'comments/:comic_id/:page_id', to: 'comments#create'
+  # put 'comments/:comic_id/:page_id/:comment_id', to: 'comments#update'
+  # delete 'comments/:comic_id/:page_id/:comment_id', to: 'comments#destroy'
 end

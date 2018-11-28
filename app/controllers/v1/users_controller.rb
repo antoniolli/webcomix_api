@@ -1,5 +1,6 @@
-class UsersController < ApplicationController
-  skip_before_action :authorize_request, only: :create
+module V1
+  class UsersController < ApplicationController
+    skip_before_action :authorize_request, only: :create
 
   # POST /signup
   # return authenticated token upon signup
@@ -10,6 +11,10 @@ class UsersController < ApplicationController
     json_response(response, :created)
   end
 
+  def favorites
+    current_user.favorites
+  end
+
   private
 
   def user_params
@@ -18,6 +23,7 @@ class UsersController < ApplicationController
       :email,
       :password,
       :password_confirmation,
-    )
+      )
   end
+end
 end

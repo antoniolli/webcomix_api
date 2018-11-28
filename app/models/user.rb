@@ -4,6 +4,8 @@ class User < ApplicationRecord
 
   # model association
   has_many :comics, dependent: :destroy
+  has_many :subscribers, dependent: :destroy
+  has_many :comments, dependent: :destroy
   has_one_attached :avatar
 
   # validations

@@ -2,6 +2,7 @@ class Comic < ApplicationRecord
   # model association
   belongs_to :user
   has_many :pages, dependent: :destroy
+  has_many :subscribers, dependent: :destroy
   has_one_attached :cover
 
   # validations

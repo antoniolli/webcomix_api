@@ -61,7 +61,7 @@ RSpec.describe 'Comics API', type: :request do
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non euismod quam, vitae cursus ligula. Donec dignissim dui elit, id venenatis nibh consectetur in. Suspendisse potenti. Quisque vel est viverra, posuere ante vitae, posuere eros. Curabitur fermentum nibh dolor, eu facilisis urna condimentum a. Praesent id leo varius, elementum leo a, blandit eros. Pellentesque in nunc ac arcu vestibulum ultricies a non urna. Sed feugiat nulla a nulla pharetra posuere. Etiam sed pharetra felis. Pellentesque aliquet tincidunt viverra. Quisque rutrum molestie turpis a sagittis. Vestibulum sed quam et augue volutpat lacinia in vitae erat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar risus at arcu ornare porttitor.',
         is_public: true,
         is_comments_active: true,
-        user_id: user.id.to_i }.to_json
+     user_id: user.id.to_i }.to_json
     end
     context 'when the request is valid' do
       before { post '/comics', params: valid_attributes, headers: headers }
