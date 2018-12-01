@@ -5,14 +5,8 @@ module V1
 
     # GET /comics
     def index
-      payload = []
       @comics = Comic.all.paginate(page: params[:page], per_page: 20)
-      @comics.each do |comic|
-        temp = comic.attributes
-        temp["author"] = User.find(comic.user_id).name
-        temp["url"] = comic.cover.attachment ? url_for(comic.cover) : ''
-        payload.push(temp)
-      end
+      payload = get_url(@comics)
       json_response(payload)
     end
 
@@ -68,9 +62,8 @@ module V1
       }
 
       @comics = Comic.joins(:user).where(params_matches_string.(:name).or(params_matches_string_user.(:name)))
-
-      #@comic = Comic.includes(:user).where("name LIKE ?", "%#{keyword}%").where("name LIKE ?", "%#{keyword}%")
-      json_response(@comics)
+      payload = get_url(@comics)
+      json_response(payload)
     end
 
     private
@@ -82,6 +75,17 @@ module V1
 
     def set_comic
       @comic = Comic.find(params[:id])
+    end
+
+    def get_url(comics)
+      payload = []
+      comics.each do |comic|
+        temp = comic.attributes
+        temp["author"] = User.find(comic.user_id).name
+        temp["url"] = comic.cover.attachment ? url_for(comic.cover) : ''
+        payload.push(temp)
+      end
+      return payload
     end
   end
 end
