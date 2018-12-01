@@ -59,7 +59,7 @@ module V1
 
   # GET /favorites/:comic_id
   def show_favorites
-    favorite = current_user.subscribers.find(params[:id])
+    favorite = current_user.subscribers.exists?(:comic_id => params[:comic_id])
     json_response(favorite)
   end
 
