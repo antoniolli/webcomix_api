@@ -70,6 +70,14 @@ module V1
     json_response(favorite, :created)
   end
 
+  def update_favorites
+    comic = Comic.find(params[:comic_id])
+    user = User.find(params[:user_id])
+    subscriber = comic.subscribers.find_by(user_id: params[:user_id], comic_id: params[:comic_id])
+    subscriber.destroy if (current_user.id == comic.user_id)
+    head :no_content
+  end
+
   # DELETE /favorites/:comic_id
   def destroy_favorites
     favorite = current_user.subscribers.find_by(comic_id: params[:comic_id])
@@ -82,7 +90,7 @@ module V1
   private
 
   def subscriber_params
-    params.permit(:is_blocked, :id, :comic_id)
+    params.permit(:is_blocked, :id, :comic_id, :user_id)
   end
 
   def set_comic

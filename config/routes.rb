@@ -12,10 +12,14 @@ Rails.application.routes.draw do
       end
     end
 
+    # Search
+    get 'search/comics', to: 'comics#search'
+
     # Favorites
     get 'favorites', to: 'subscribers#index_favorites'
     get 'favorites/:comic_id', to: 'subscribers#show_favorites'
     post 'favorites/:comic_id', to: 'subscribers#create_favorites'
+    put 'favorites/:comic_id', to: 'subscribers#update_favorites'
     delete 'favorites/:comic_id', to: 'subscribers#destroy_favorites'
 
     # Login
