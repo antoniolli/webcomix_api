@@ -48,7 +48,7 @@ module V1
   def index_favorites
     payload = []
     @favorites.each do |favorite|
-      temp = favorite.attributes
+      temp = favorite.slice(:comic_id)
       comic = Comic.find(favorite.comic_id)
       temp['name'] = comic.name
       temp["url"] = comic.cover.attachment ? url_for(comic.cover) : ''
@@ -102,7 +102,7 @@ module V1
   end
 
   def set_favorites
-    @favorites = Subscriber.where(user_id: current_user.id)
+    @favorites = Subscriber.where(user_id: current_user.id).where(is_blocked: false)
   end
 end
 end
