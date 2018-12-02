@@ -12,6 +12,9 @@ Rails.application.routes.draw do
       end
     end
 
+    # Pages
+    put 'comics/:comic_id/pages/:id/number', to: 'pages#update_number'
+
     # Search
     get 'search/comics', to: 'comics#search'
     get 'my/comics', to: 'comics#by_user'

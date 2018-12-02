@@ -1,7 +1,7 @@
 module V1
   class PagesController < ApplicationController
     before_action :set_comic
-    before_action :set_comic_page, only: [:show, :update, :destroy]
+    before_action :set_comic_page, only: [:show, :update, :update_number, :destroy]
     skip_before_action :authorize_request, only: [:index, :show]
 
     # GET /comics/:comic_id/pages
@@ -35,6 +35,12 @@ module V1
       head :no_content
     end
 
+    # PUT /comics/:comic_id/pages/:id
+    def update_number
+      @page.update_attribute('number', params[:number])
+      head :no_content
+    end
+
     # DELETE /comics/:comic_id/pages/:id
     def destroy
       @page.destroy
@@ -44,7 +50,7 @@ module V1
     private
 
     def page_params
-      params.permit(:title, :number, :is_public, :comic_id, :image)
+      params.permit(:title, :number, :is_public, :comic_id, :image, :page_id, :id, :page)
     end
 
     def set_comic
