@@ -11,7 +11,7 @@ module V1
         temp = page.attributes
         temp["name"] = @comic.name
         temp["url"] = page.image.attachment ? url_for(page.image) : ''
-        payload.push(temp)
+        payload.push(temp) if (page.is_public == true || @comic.user_id == current_user.id)
       end
       json_response(payload)
     end
@@ -20,7 +20,7 @@ module V1
     def show
       payload = @page.attributes
       payload["url"] = @page.image.attachment ? url_for(@page.image) : ''
-      json_response(payload)
+      json_response(payload) if (page.is_public == true || @comic.user_id == current_user.id)
     end
 
     # POST /comics/:comic_id/pages

@@ -5,7 +5,7 @@ module V1
 
     # GET /comics
     def index
-      @comics = Comic.all.paginate(page: params[:page], per_page: 20)
+      @comics = Comic.where(:is_public => true)
       payload = get_url(@comics)
       json_response(payload)
     end
@@ -22,8 +22,12 @@ module V1
       payload = @comic.attributes
       payload["author"] = User.find(@comic.user_id).name
       payload["url"] = @comic.cover.attachment ? url_for(@comic.cover) : ''
-      payload["pages"] = @comic.pages
-      json_response(payload)
+      temp = []
+      @comic.pages.each do |page|
+        temp.push(page) if (page.is_public == true || @comic.user_id == current_user.id)
+      end
+      payload["pages"] = temp
+      json_response(payload) if (@comic.is_public == true || @comic.user_id == current_user.id)
     end
 
     def follow
