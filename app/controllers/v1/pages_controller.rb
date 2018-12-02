@@ -9,6 +9,7 @@ module V1
       payload = []
       @comic.pages.each do |page|
         temp = page.attributes
+        temp["name"] = @comic.name
         temp["url"] = page.image.attachment ? url_for(page.image) : ''
         payload.push(temp)
       end
