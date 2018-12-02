@@ -46,7 +46,8 @@ module V1
     # GET /comics/user/:id
     def by_user
       @comics = current_user.comics
-      json_response(@comics)
+      payload = get_url(@comics)
+      json_response(payload)
     end
 
     # GET /comics/user/:id
