@@ -9,7 +9,7 @@ module V1
       payload = []
       @comic.pages.each do |page|
         temp = page.attributes
-        temp["url"] = page.image.attachment ? url_for(page.image.variant(resize: "100x100").processed) : ''
+        temp["url"] = page.image.attachment ? url_for(page.image) : ''
         payload.push(temp)
       end
       json_response(payload)
