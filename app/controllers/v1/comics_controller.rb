@@ -44,10 +44,6 @@ module V1
       @comic.toggle!(:is_comments_active) if comic_params[:is_comments_active] != @comic.is_comments_active.to_s
       #head :no_content
       @comic.save
-      payload = {
-        comic: @comic.is_public.to_s,
-        param: params[:is_public]
-      }
       json_response(payload)
     end
 

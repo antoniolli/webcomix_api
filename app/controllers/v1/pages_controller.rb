@@ -32,8 +32,12 @@ module V1
 
     # PUT /comics/:comic_id/pages/:id
     def update
-      @page.update(page_params)
+      @page.update_attribute('title', params[:title])
+      @page.update_attribute('number', params[:number])
+      @page.image.attach(params[:image]) if params[:image]
+      @page.toggle!(:is_public) if params[:is_public] != @page.is_public.to_s
       head :no_content
+      @page.save
     end
 
     # PUT /comics/:comic_id/pages/:id
