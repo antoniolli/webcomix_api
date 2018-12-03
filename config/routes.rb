@@ -17,7 +17,8 @@ Rails.application.routes.draw do
 
     # Search
     get 'search/comics', to: 'comics#search'
-    get 'my/comics', to: 'comics#by_user'
+    get 'my/comics', to: 'comics#all_by_user'
+    get 'my/comics/:id', to: 'comics#by_user'
 
     # Favorites
     get 'favorites', to: 'subscribers#index_favorites'

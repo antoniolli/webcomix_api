@@ -58,9 +58,17 @@ module V1
     end
 
     # GET /comics/user/:id
-    def by_user
+    def all_by_user
       @comics = current_user.comics
       payload = get_url(@comics)
+      json_response(payload)
+    end
+
+    # GET /comics/user/:id
+    def by_user
+      comic = current_user.comics.find(params[:id])
+      payload = comic.attributes
+      payload['url'] = comic.cover.attachment ? url_for(comic.cover) : ''
       json_response(payload)
     end
 
