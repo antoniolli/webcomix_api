@@ -104,6 +104,7 @@ module V1
     subscribers.each do |subscriber|
       temp = {}
       temp['id'] = subscriber.id
+      temp['user_id'] = subscriber.user_id
       temp['is_blocked'] = subscriber.is_blocked
       temp['name'] = User.find(subscriber.user_id).name
       payload.push(temp)
