@@ -7,12 +7,7 @@ module V1
 
   # GET /comic/:comic_id/subscribers
   def index
-    payload = []
-    @subscribers.each do |subscriber|
-      temp = subscriber.attributes
-      temp['name'] = User.find(subscriber.user_id).name
-      payload.push(temp)
-    end
+    payload = parse_subscribers(@subscribers)
     json_response(payload)
   end
 
@@ -31,10 +26,9 @@ module V1
   # PUT /comic/:comic_id/subscribers/:id
   def update
     subscriber = @comic.subscribers.find(params[:id])
-    subscriber.update(subscriber_params[:is_blocked]) if (current_user.id == @comic.user_id)
-    head :no_content
-
-    json_response(subscriber)
+    subscriber.toggle!(:is_blocked) if (current_user.id == @comic.user_id)
+    subscriber.save
+    payload = parse_subscribers(Subscriber.where(comic_id: params[:comic_id]))
   end
 
   # DELETE /comic/:comic_id/subscribers/:id
@@ -103,6 +97,18 @@ module V1
 
   def set_favorites
     @favorites = Subscriber.where(user_id: current_user.id).where(is_blocked: false)
+  end
+
+  def parse_subscribers(subscribers)
+    payload = []
+    subscribers.each do |subscriber|
+      temp = {}
+      temp['id'] = subscriber.id
+      temp['is_blocked'] = subscriber.is_blocked
+      temp['name'] = User.find(subscriber.user_id).name
+      payload.push(temp)
+    end
+    return payload
   end
 end
 end

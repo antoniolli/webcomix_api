@@ -1,7 +1,7 @@
 module V1
   class ComicsController < ApplicationController
     before_action :set_comic, only: [:show, :update, :destroy]
-    skip_before_action :authorize_request, only: [:index, :show]
+    skip_before_action :authorize_request, only: [:index, :show, :search]
 
     # GET /comics
     def index
