@@ -28,7 +28,7 @@ module V1
     subscriber = @comic.subscribers.find(params[:id])
     subscriber.toggle!(:is_blocked) if (current_user.id == @comic.user_id)
     subscriber.save
-    payload = parse_subscribers(Subscriber.where(comic_id: params[:comic_id]))
+    json_response(subscriber)
   end
 
   # DELETE /comic/:comic_id/subscribers/:id
