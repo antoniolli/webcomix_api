@@ -24,7 +24,9 @@ module V1
       payload["url"] = @comic.cover.attachment ? url_for(@comic.cover) : ''
       temp = []
       @comic.pages.each do |page|
-        temp.push(page) if (page.is_public == true || @comic.user_id == current_user.id)
+        pag = page.attributes
+        pag["url"] = page.image.attachment ? url_for(page.image) : ''
+        temp.push(pag) if (page.is_public == true || @comic.user_id == current_user.id)
       end
       payload["pages"] = temp
       json_response(payload) if (@comic.is_public == true)
