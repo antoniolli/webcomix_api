@@ -41,7 +41,7 @@ module V1
     def update
       @comic.update_attributes(comic_params)
       @comic.cover.attach(comic_params[:cover]) if comic_params[:cover]
-      json_response(@comic.errors.inspect)
+      json_response(@comic)
     end
 
     # DELETE /comics/:id
