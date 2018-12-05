@@ -1,7 +1,7 @@
 module V1
   class PagesController < ApplicationController
     before_action :set_comic
-    before_action :set_comic_page, only: [:show, :update, :update_number, :destroy]
+    before_action :set_comic_page, only: [:show, :update, :update_number, :by_user, :destroy]
     skip_before_action :authorize_request, only: [:index, :show]
 
     # GET /comics/:comic_id/pages
@@ -11,7 +11,7 @@ module V1
         temp = page.attributes
         temp["name"] = @comic.name
         temp["url"] = page.image.attachment ? url_for(page.image) : ''
-        payload.push(temp) if (page.is_public == true || @comic.user_id == current_user.id)
+        payload.push(temp) if page.is_public == true
       end
       json_response(payload)
     end
@@ -20,7 +20,7 @@ module V1
     def show
       payload = @page.attributes
       payload["url"] = @page.image.attachment ? url_for(@page.image) : ''
-      json_response(payload) if (@page.is_public == true || @comic.user_id == current_user.id)
+      json_response(payload) if @page.is_public == true
     end
 
     # POST /comics/:comic_id/pages
@@ -35,9 +35,9 @@ module V1
       @page.update_attribute('title', params[:title])
       @page.update_attribute('number', params[:number])
       @page.image.attach(params[:image]) if params[:image]
-      @page.toggle!(:is_public) if params[:is_public] != @page.is_public.to_s
-      head :no_content
+      @page.update_attribute('is_public', params[:is_public])
       @page.save
+      json_response(@page)
     end
 
     # PUT /comics/:comic_id/pages/:id
@@ -50,6 +50,31 @@ module V1
     def destroy
       @page.destroy
       head :no_content
+    end
+
+    def by_user
+      if(current_user.id == @comic.user_id)
+        payload = @page.attributes
+        payload['url'] = @page.image.attachment ? url_for(@page.image) : ''
+        json_response(payload)
+      else
+        json_response(null)
+      end
+    end
+
+    def all_by_user
+      if(current_user.id == @comic.user_id)
+        payload = []
+        @comic.pages.each do |page|
+          temp = page.attributes
+          temp["name"] = @comic.name
+          temp["url"] = page.image.attachment ? url_for(page.image) : ''
+          payload.push(temp)
+        end
+        json_response(payload)
+      else
+        json_response({})
+      end
     end
 
     private
