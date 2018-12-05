@@ -29,7 +29,7 @@ module V1
         temp.push(pag) if (page.is_public == true || @comic.user_id == current_user.id)
       end
       payload["pages"] = temp
-      json_response(payload) if (@comic.is_public == true)
+      json_response(payload)
     end
 
     def follow
@@ -39,14 +39,9 @@ module V1
 
     # PUT /comics/:id
     def update
-      @comic.update_attribute('name', params[:name])
-      @comic.update_attribute('description', params[:description])
+      @comic.update_attributes(comic_params)
       @comic.cover.attach(comic_params[:cover]) if comic_params[:cover]
-      @comic.toggle!(:is_public) if comic_params[:is_public] != @comic.is_public.to_s
-      @comic.toggle!(:is_comments_active) if comic_params[:is_comments_active] != @comic.is_comments_active.to_s
-      #head :no_content
-      @comic.save
-      json_response(payload)
+      json_response(@comic.errors.inspect)
     end
 
     # DELETE /comics/:id

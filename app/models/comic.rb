@@ -6,5 +6,5 @@ class Comic < ApplicationRecord
   has_one_attached :cover
 
   # validations
-  validates_presence_of :name, :description, :is_public, :is_comments_active
+  validates_presence_of :name, :description
 end
