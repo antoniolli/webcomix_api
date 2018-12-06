@@ -17,10 +17,14 @@ Rails.application.routes.draw do
 
     # Search
     get 'search/comics', to: 'comics#search'
+
+    # MyComic
+    put 'my/profile', to: 'users#update'
     get 'my/comics', to: 'comics#all_by_user'
     get 'my/comics/:id', to: 'comics#by_user'
     get 'my/comics/:comic_id/pages', to: 'pages#all_by_user'
     get 'my/comics/:comic_id/pages/:id', to: 'pages#by_user'
+    delete 'my/comics/:comic_id/pages/:page_id/comments/:id', to: 'comments#author_destroy'
 
 
     # Favorites

@@ -1,6 +1,6 @@
 module V1
   class CommentsController < ApplicationController
-    before_action :set_comic_page, only: [:index, :show, :create, :update, :destroy]
+    before_action :set_comic_page, only: [:index, :show, :create, :update, :destroy, :author_destroy]
     before_action :set_comments, only: [:index, :show]
     skip_before_action :authorize_request, only: [:index, :show]
 
@@ -8,8 +8,10 @@ module V1
     def index
       payload = []
       @comments.each do |comment|
+        user = User.find(comment.user_id)
         temp = comment.attributes
-        temp['name'] = User.find(comment.user_id).name
+        temp['name'] = user.name
+        temp['url'] = user.avatar.attachment ? url_for(user.avatar) : ''
         payload.push(temp)
       end
         json_response(payload)
@@ -38,6 +40,13 @@ module V1
     def destroy
       comment = @page.comments.find(params[:id])
       comment.destroy if (current_user.id == comment.user_id)
+      head :no_content
+    end
+
+    # DELETE /comments/:comic_id/pages/:page_id/:id
+    def author_destroy
+      comment = @page.comments.find(params[:id])
+      comment.destroy
       head :no_content
     end
 

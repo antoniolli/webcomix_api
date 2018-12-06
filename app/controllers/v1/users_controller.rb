@@ -11,6 +11,14 @@ module V1
     json_response(response, :created)
   end
 
+  def update
+    current_user.update_attributes(user_params)
+    current_user.avatar.attach(user_params[:avatar]) if user_params[:avatar]
+    payload = current_user.slice(:id, :email, :name)
+    payload['url'] = current_user.avatar.attachment ? url_for(current_user.avatar) : ''
+    json_response(payload)
+  end
+
   def favorites
     current_user.favorites
   end
@@ -20,6 +28,8 @@ module V1
   def user_params
     params.permit(
       :name,
+      :id,
+      :avatar,
       :email,
       :password,
       :password_confirmation,
