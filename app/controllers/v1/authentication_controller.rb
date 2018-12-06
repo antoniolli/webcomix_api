@@ -5,7 +5,9 @@ module V1
   def authenticate
     auth_token = AuthenticateUser.new(auth_params[:email], auth_params[:password]).call
     user = User.find_by(email: auth_params[:email])
-    json_response(auth_token: auth_token, user: user.slice(:id, :email, :name))
+    temp_user = user.slice(:id, :email, :name)
+    temp_user['url'] = user.avatar.attachment ? url_for(user.avatar) : ''
+    json_response(auth_token: auth_token, user: temp_user)
   end
 
   private
