@@ -12,8 +12,9 @@ module V1
   end
 
   def update
-    current_user.update_attribute(:name, params[:name])
+    current_user.name = params[:name]
     current_user.avatar.attach(user_params[:avatar]) if user_params[:avatar]
+    current_user.save
     payload = current_user.slice(:id, :email, :name)
     payload['url'] = current_user.avatar.attachment ? url_for(current_user.avatar) : ''
     json_response(payload)
