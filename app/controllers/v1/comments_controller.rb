@@ -32,7 +32,8 @@ module V1
     # PUT /comments/:comic_id/pages/:page_id/:id
     def update
       comment = @page.comments.find(params[:id])
-      comment.update(params[:message]) if (current_user.id == comment.user_id)
+      comment.message = params[:message]
+      comment.save if (current_user.id == comment.user_id)
       head :no_content
     end
 
