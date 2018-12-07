@@ -29,7 +29,7 @@ module V1
         temp.push(pag) if page.is_public == true
       end
       payload["pages"] = temp
-      json_response(payload)
+      json_response(payload) if @comic.is_public == true
     end
 
     def follow
